@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rtk playwright *)",
+      "WebFetch(domain:jodell-website.vercel.app)",
+      "WebFetch(domain:github.com)",
+      "Bash(rtk git *)"
+    ]
+  }
+}
