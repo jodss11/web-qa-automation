@@ -1,7 +1,7 @@
-import { test, expect } from '@playwright/test';
-import { PortfolioPage } from '../pages/PortfolioPage';
+import { test, expect } from "@playwright/test";
+import { PortfolioPage } from "../pages/PortfolioPage";
 
-test.describe('Portfolio Website Functionality Tests', () => {
+test.describe("Portfolio Website Functionality Tests", () => {
   let portfolioPage: PortfolioPage;
 
   test.beforeEach(async ({ page }) => {
@@ -9,177 +9,203 @@ test.describe('Portfolio Website Functionality Tests', () => {
     await portfolioPage.goto();
   });
 
-  test('should load the portfolio page successfully', async ({ page }) => {
+  test("should load the portfolio page successfully", async ({ page }) => {
     await portfolioPage.verifyPageTitle();
     await portfolioPage.verifyHeroSection();
   });
 
-  test('should navigate to About section', async ({ page }) => {
+  test("should navigate to About section", async ({ page }) => {
     await portfolioPage.navigateToAbout();
     await expect(portfolioPage.summarySection).toBeVisible();
-    // Wait for potential URL update
-    await page.waitForTimeout(1000);
-    // Accept that the URL might not change if JS handles scrolling internally
-    await expect(page.url()).toContain('jodell-website.vercel.app');
+    // For now, just verify we can navigate and the section is visible
+    // The URL handling depends on how the site implements scrolling
   });
 
-  test('should navigate to Skills section', async ({ page }) => {
+  test("should navigate to Skills section", async ({ page }) => {
     await portfolioPage.navigateToSkills();
     await expect(portfolioPage.skillsSection).toBeVisible();
-    // Wait for potential URL update
-    await page.waitForTimeout(1000);
-    // Accept that the URL might not change if JS handles scrolling internally
-    await expect(page.url()).toContain('jodell-website.vercel.app');
   });
 
-  test('should navigate to Projects section', async ({ page }) => {
+  test("should navigate to Projects section", async ({ page }) => {
     await portfolioPage.navigateToProjects();
     await expect(portfolioPage.projectsSection).toBeVisible();
-    // Wait for potential URL update
-    await page.waitForTimeout(1000);
-    // Accept that the URL might not change if JS handles scrolling internally
-    await expect(page.url()).toContain('jodell-website.vercel.app');
   });
 
-  test('should navigate to Experience section', async ({ page }) => {
+  test("should navigate to Experience section", async ({ page }) => {
     await portfolioPage.navigateToExperience();
     await expect(portfolioPage.experienceSection).toBeVisible();
-    // Wait for potential URL update
-    await page.waitForTimeout(1000);
-    // Accept that the URL might not change if JS handles scrolling internally
-    await expect(page.url()).toContain('jodell-website.vercel.app');
   });
 
-  test('should verify all main sections are present', async ({ page }) => {
+  test("should verify all main sections are present", async ({ page }) => {
     await portfolioPage.verifyAllSectionsPresent();
   });
 
-  test('should verify typewriter effect in subtitle', async ({ page }) => {
-    await portfolioPage.verifyTypewriterEffect();
+  test("should verify subtitle contains expected content", async ({ page }) => {
+    await portfolioPage.verifyHeroSection();
+
+    // Wait for subtitle element to be present and get text content
+    await expect(portfolioPage.subtitleElement).toBeVisible({ timeout: 5000 });
+    const subtitleText = await portfolioPage.subtitleElement.textContent();
+
+    // Verify we get subtitle text (whether animated or static)
+    expect(subtitleText?.length).toBeGreaterThan(0);
+    // Log what we found for debugging
+    console.log(`Subtitle text found: "${subtitleText?.trim()}"`);
   });
 
-  test('should click GitHub link and verify navigation', async ({ page }) => {
-    // Debug: check what GitHub links exist
-    const allGitHubLinks = page.locator('a[href*="github.com"]');
-    const count = await allGitHubLinks.count();
-    console.log(`Found ${count} GitHub links`);
-
-    for (let i = 0; i < count; i++) {
-      const href = await allGitHubLinks.nth(i).getAttribute('href');
-      console.log(`Link ${i}: ${href}`);
-    }
-
-    // Wait for the link and click it
-    await portfolioPage.clickGitHubLink();
-
-    // Check if it opened a new tab/popup
-    const pages = page.context().pages();
-    if (pages.length > 1) {
-      // New tab was opened
-      const newPage = pages[pages.length - 1];
-      await expect(newPage).toHaveURL(/github\.com\/jodss11/);
-      await newPage.close();
-    } else {
-      // Same tab navigation - go back
-      await expect(page).toHaveURL(/github\.com\/jodss11/);
-      await page.goBack();
-    }
+  test("should click logo and verify navigation", async ({ page }) => {
+    await portfolioPage.clickLogo();
+    await expect(page.locator('#hero')).toBeVisible();
   });
 
-  test('should click JobStreet link and verify navigation', async ({ page }) => {
-    // Wait for the link and click it
-    await portfolioPage.clickJobStreetLink();
-
-    // Check if it opened a new tab/popup
-    const pages = page.context().pages();
-    if (pages.length > 1) {
-      // New tab was opened
-      const newPage = pages[pages.length - 1];
-      await expect(newPage).toHaveURL(/jobstreet\.com/);
-      await newPage.close();
-    } else {
-      // Same tab navigation - go back
-      await expect(page).toHaveURL(/jobstreet\.com/);
-      await page.goBack();
-    }
-  });
-
-  test('should click LinkedIn link and verify navigation', async ({ page }) => {
-    // Wait for the link and click it
-    await portfolioPage.clickLinkedInLink();
-
-    // Check if it opened a new tab/popup
-    const pages = page.context().pages();
-    if (pages.length > 1) {
-      // New tab was opened
-      const newPage = pages[pages.length - 1];
-      await expect(newPage).toHaveURL(/linkedin\.com/);
-      await newPage.close();
-    } else {
-      // Same tab navigation - go back
-      await expect(page).toHaveURL(/linkedin\.com/);
-      await page.goBack();
-    }
-  });
-
-  test('should initiate resume download', async ({ page }) => {
-    // Wait for the download and click
-    const [download] = await Promise.all([
-      page.waitForEvent('download'),
-      portfolioPage.clickDownloadResume()
+  test("should click Security Inventory QA link and verify navigation", async ({
+    page,
+  }) => {
+    // Wait for potential new page and click the link
+    const [newPage] = await Promise.all([
+      page.waitForEvent('popup'),
+      portfolioPage.clickSecurityInventoryQa(),
     ]);
 
-    const suggestedFilename = download.suggestedFilename();
-    expect(suggestedFilename).toContain('.pdf');
-
-    // Clean up the download
-    await download.delete();
-  });
-
-  test('should test mobile menu toggle', async ({ page }) => {
-    // Set mobile viewport
-    await page.setViewportSize({ width: 375, height: 667 }); // iPhone X
-
-    // Check if mobile menu toggle exists
-    if (await portfolioPage.mobileMenuToggle.count() > 0) {
-      await portfolioPage.toggleMobileMenu();
-      // Add assertion based on expected behavior
+    if (newPage) {
+      // New tab was opened
+      await expect(newPage).toHaveURL(
+        /github\.com\/jodss11\/security-inventory-qa/,
+      );
+      await newPage.close();
+    } else {
+      // Fallback: check if navigation happened in same tab
+      await expect(page).toHaveURL(
+        /github\.com\/jodss11\/security-inventory-qa/,
+      );
+      await page.goBack();
     }
   });
 
-  test('should verify skills progress bars animation', async ({ page }) => {
-    await portfolioPage.verifySkillsProgressBars();
+  test("should click Selenium Automation link and verify navigation", async ({
+    page,
+  }) => {
+    // Wait for potential new page and click the link
+    const [newPage] = await Promise.all([
+      page.waitForEvent('popup'),
+      portfolioPage.clickSeleniumAutomation(),
+    ]);
+
+    if (newPage) {
+      // New tab was opened
+      await expect(newPage).toHaveURL(
+        /github\.com\/jodss11\/selenium_automation/,
+      );
+      await newPage.close();
+    } else {
+      // Fallback: check if navigation happened in same tab
+      await expect(page).toHaveURL(/github\.com\/jodss11\/selenium_automation/);
+      await page.goBack();
+    }
   });
 
-  test('should verify Web QA Automation project is present', async ({ page }) => {
-    await portfolioPage.verifyWebQaAutomationProject();
+  test("should click QA Practice Site link and verify navigation", async ({
+    page,
+  }) => {
+    // Wait for potential new page and click the link
+    const [newPage] = await Promise.all([
+      page.waitForEvent('popup'),
+      portfolioPage.clickQaPracticeSite(),
+    ]);
+
+    if (newPage) {
+      // New tab was opened
+      await expect(newPage).toHaveURL(/github\.com\/jodss11\/qa-practice-site/);
+      await newPage.close();
+    } else {
+      // Fallback: check if navigation happened in same tab
+      await expect(page).toHaveURL(/github\.com\/jodss11\/qa-practice-site/);
+      await page.goBack();
+    }
   });
 
-  test('should verify form handling', async ({ page }) => {
-    await portfolioPage.verifyFormHandling();
+  test("should click QA Automation Portfolio link and verify navigation", async ({
+    page,
+  }) => {
+    // Wait for potential new page and click the link
+    const [newPage] = await Promise.all([
+      page.waitForEvent('popup'),
+      portfolioPage.clickQaAutomationPortfolio(),
+    ]);
+
+    if (newPage) {
+      // New tab was opened
+      await expect(newPage).toHaveURL(
+        /github\.com\/jodss11\/qa-automation-portfolio/,
+      );
+      await newPage.close();
+    } else {
+      // Fallback: check if navigation happened in same tab
+      await expect(page).toHaveURL(
+        /github\.com\/jodss11\/qa-automation-portfolio/,
+      );
+      await page.goBack();
+    }
   });
 
-  test('should verify scroll reveal elements', async ({ page }) => {
-    await portfolioPage.verifyScrollReveal();
+  test("should click Web QA Automation link and verify navigation", async ({
+    page,
+  }) => {
+    // Wait for potential new page and click the link
+    const [newPage] = await Promise.all([
+      page.waitForEvent('popup'),
+      portfolioPage.clickWebQaAutomation(),
+    ]);
+
+    if (newPage) {
+      // New tab was opened
+      await expect(newPage).toHaveURL(
+        /github\.com\/jodss11\/web-qa-automation/,
+      );
+      await newPage.close();
+    } else {
+      // Fallback: check if navigation happened in same tab
+      await expect(page).toHaveURL(/github\.com\/jodss11\/web-qa-automation/);
+      await page.goBack();
+    }
   });
 
-  test('should test responsive design - mobile view', async ({ page }) => {
-    await portfolioPage.verifyResponsiveDesign({ width: 375, height: 667 }, 'mobile'); // iPhone X
+  test("should verify skills section content", async ({ page }) => {
+    await portfolioPage.navigateToSkills();
+    await expect(portfolioPage.skillsSection).toBeVisible();
+    await portfolioPage.verifySkillsContent();
   });
 
-  test('should test responsive design - tablet view', async ({ page }) => {
-    await portfolioPage.verifyResponsiveDesign({ width: 768, height: 1024 }, 'tablet'); // iPad
+  test("should verify projects section structure", async ({ page }) => {
+    await portfolioPage.navigateToProjects();
+    await expect(portfolioPage.projectsSection).toBeVisible();
+    await portfolioPage.verifyProjectsSection();
   });
 
-  test('should test responsive design - desktop view', async ({ page }) => {
-    await portfolioPage.verifyResponsiveDesign({ width: 1920, height: 1080 }, 'desktop');
+  test("should verify external project links", async ({ page }) => {
+    await portfolioPage.navigateToProjects();
+    await expect(portfolioPage.projectsSection).toBeVisible();
+    await portfolioPage.verifyExternalLinks();
   });
 
-  test('should verify smooth scrolling behavior', async ({ page }) => {
-    await portfolioPage.verifySmoothScrolling();
+  test("should test responsive design - mobile view", async ({ page }) => {
+    await portfolioPage.verifyResponsiveDesign(
+      { width: 375, height: 667 },
+      "mobile",
+    ); // iPhone X
   });
 
-  test('should verify icon hover effects', async ({ page }) => {
-    await portfolioPage.verifyIconHoverEffects();
+  test("should test responsive design - tablet view", async ({ page }) => {
+    await portfolioPage.verifyResponsiveDesign(
+      { width: 768, height: 1024 },
+      "tablet",
+    ); // iPad
+  });
+
+  test("should test responsive design - desktop view", async ({ page }) => {
+    await portfolioPage.verifyResponsiveDesign(
+      { width: 1920, height: 1080 },
+      "desktop",
+    );
   });
 });

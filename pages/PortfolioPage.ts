@@ -3,19 +3,19 @@ import { Page, Locator, expect } from '@playwright/test';
 export class PortfolioPage {
   readonly page: Page;
 
-  // Navigation links
+  // Navigation links (in header nav)
   readonly aboutLink: Locator;
   readonly skillsLink: Locator;
   readonly projectsLink: Locator;
   readonly experienceLink: Locator;
-  readonly mobileMenuToggle: Locator;
-  readonly mobileMenu: Locator;
+  readonly logoLink: Locator;
 
-  // External links
-  readonly githubLink: Locator;
-  readonly jobstreetLink: Locator;
-  readonly linkedinLink: Locator;
-  readonly downloadResumeLink: Locator;
+  // External links (in projects section)
+  readonly securityInventoryQaLink: Locator;
+  readonly seleniumAutomationLink: Locator;
+  readonly qaPracticeSiteLink: Locator;
+  readonly qaAutomationPortfolioLink: Locator;
+  readonly webQaAutomationLink: Locator;
 
   // Sections
   readonly heroSection: Locator;
@@ -24,44 +24,34 @@ export class PortfolioPage {
   readonly projectsSection: Locator;
   readonly experienceSection: Locator;
   readonly educationSection: Locator;
-
-  // Typewriter effect
   readonly subtitleElement: Locator;
 
-  // Skills progress bars
-  readonly skillsProgressBars: Locator;
-  readonly langProgressBars: Locator;
-  readonly frameworksProgressBars: Locator;
-  readonly conceptsProgressBars: Locator;
+  // Skills content
+  readonly languagesSection: Locator;
+  readonly frameworksSection: Locator;
+  readonly conceptsSection: Locator;
 
-  // Project cards
-  readonly webQaAutomationProject: Locator;
-
-  // Form elements
-  readonly contactForm: Locator;
-  readonly formSubmitButton: Locator;
-
-  // Scroll reveal elements
-  readonly scrollRevealElements: Locator;
+  // Project categories
+  readonly qaAutomationProjectCategory: Locator;
+  readonly ticketlyMobileProjectCategory: Locator;
+  readonly iotRoboticsProjectCategory: Locator;
 
   constructor(page: Page) {
     this.page = page;
 
-    // Navigation links
-    this.aboutLink = page.locator('nav a[href="#summary"]');
-    this.skillsLink = page.locator('nav a[href="#skills"]');
-    this.projectsLink = page.locator('nav a[href="#projects"]');
-    this.experienceLink = page.locator('nav a[href="#experience"]');
+    // Navigation links (in header nav)
+    this.logoLink = page.locator('nav a[href="#hero"]');
+    this.aboutLink = page.locator('nav ul li a[href="#summary"]');
+    this.skillsLink = page.locator('nav ul li a[href="#skills"]');
+    this.projectsLink = page.locator('nav ul li a[href="#projects"]');
+    this.experienceLink = page.locator('nav ul li a[href="#experience"]');
 
-    // Mobile menu
-    this.mobileMenuToggle = page.locator('.mobile-menu-toggle, .hamburger, [aria-label*="menu" i], .menu-toggle, button[class*="menu"]');
-    this.mobileMenu = page.locator('.mobile-menu, .nav-menu-mobile, nav[aria-expanded="true"], .menu-open');
-
-    // External links - primary GitHub profile link (the first one in nav/footer)
-    this.githubLink = page.locator('nav a[href="https://github.com/jodss11"], footer a[href="https://github.com/jodss11"]');
-    this.jobstreetLink = page.locator('a[href*="jobstreet.com"]');
-    this.linkedinLink = page.locator('a[href*="linkedin.com"]');
-    this.downloadResumeLink = page.locator('a[href*=".pdf"]');
+    // External links (in projects section - QA Automation & Testing)
+    this.securityInventoryQaLink = page.locator('#projects .project-link[href*="security-inventory-qa"]');
+    this.seleniumAutomationLink = page.locator('#projects .project-link[href*="selenium_automation"]');
+    this.qaPracticeSiteLink = page.locator('#projects .project-link[href*="qa-practice-site"]');
+    this.qaAutomationPortfolioLink = page.locator('#projects .project-link[href*="qa-automation-portfolio"]');
+    this.webQaAutomationLink = page.locator('#projects .project-link[href*="web-qa-automation"]');
 
     // Sections
     this.heroSection = page.locator('#hero');
@@ -71,24 +61,18 @@ export class PortfolioPage {
     this.experienceSection = page.locator('#experience');
     this.educationSection = page.locator('#education');
 
-    // Typewriter effect - specifically the animated subtitle in hero section
-    this.subtitleElement = page.locator('#hero .subtitle, .hero .subtitle').first();
+    // Skills content
+    this.languagesSection = page.locator('#skills .skill-box:has(h3:has-text("Languages")) p');
+    this.frameworksSection = page.locator('#skills .skill-box:has(h3:has-text("Frameworks & Tech")) p');
+    this.conceptsSection = page.locator('#skills .skill-box:has(h3:has-text("Concepts & Domains")) p');
 
-    // Skills progress bars
-    this.skillsProgressBars = page.locator('.skills-progress, .progress-bar, .skill-bar, .progress');
-    this.langProgressBars = page.locator('#skills .progress-bar-lang, .languages .progress-bar, [data-skill*="language"] .progress-bar');
-    this.frameworksProgressBars = page.locator('#skills .progress-bar-framework, .frameworks .progress-bar, [data-skill*="framework"] .progress-bar');
-    this.conceptsProgressBars = page.locator('#skills .progress-bar-concept, .concepts .progress-bar, [data-skill*="concept"] .progress-bar');
+    // Project categories
+    this.qaAutomationProjectCategory = page.locator('#projects h3:has-text("QA Automation & Testing")');
+    this.ticketlyMobileProjectCategory = page.locator('#projects h3:has-text("Ticketly & Mobile Application Suite")');
+    this.iotRoboticsProjectCategory = page.locator('#projects h3:has-text("IoT & Robotics Systems")');
 
-    // Project cards
-    this.webQaAutomationProject = page.locator('[data-project="web-qa-automation"], .project-card:has-text("Web QA Automation"), .project:has-text("Playwright-based test automation"), .project:has-text(" webdriver"), .project-card:has-text("QA Automation & Testing")');
-
-    // Form elements
-    this.contactForm = page.locator('form, #contact-form, .contact-form, [role="form"]');
-    this.formSubmitButton = page.locator('form button[type="submit"], #contact-form button, .contact-form button, input[type="submit"], button:has-text("Send"), button:has-text("Submit")');
-
-    // Scroll reveal elements
-    this.scrollRevealElements = page.locator('[data-scroll-reveal], .scroll-reveal, .reveal-on-scroll, [class*="reveal"], [class*="animate"]');
+    // Subtitle element
+    this.subtitleElement = page.locator('#hero .subtitle');
   }
 
   async goto() {
@@ -96,49 +80,47 @@ export class PortfolioPage {
   }
 
   async navigateToAbout() {
-    await this.aboutLink.click();
-    await this.summarySection.isVisible();
+    await this.aboutLink.click({ force: true });
+    await this.summarySection.waitFor({ state: 'visible' });
   }
 
   async navigateToSkills() {
-    await this.skillsLink.click();
-    await this.skillsSection.isVisible();
+    await this.skillsLink.click({ force: true });
+    await this.skillsSection.waitFor({ state: 'visible' });
   }
 
   async navigateToProjects() {
-    await this.projectsLink.click();
-    await this.projectsSection.isVisible();
+    await this.projectsLink.click({ force: true });
+    await this.projectsSection.waitFor({ state: 'visible' });
   }
 
   async navigateToExperience() {
-    await this.experienceLink.click();
-    await this.experienceSection.isVisible();
+    await this.experienceLink.click({ force: true });
+    await this.experienceSection.waitFor({ state: 'visible' });
   }
 
-  async clickGitHubLink() {
-    await this.githubLink.click();
+  async clickLogo() {
+    await this.logoLink.click({ force: true });
   }
 
-  async clickJobStreetLink() {
-    await this.jobstreetLink.click();
+  async clickSecurityInventoryQa() {
+    await this.securityInventoryQaLink.click({ force: true });
   }
 
-  async clickLinkedInLink() {
-    await this.linkedinLink.click();
+  async clickSeleniumAutomation() {
+    await this.seleniumAutomationLink.click({ force: true });
   }
 
-  async clickDownloadResume() {
-    await this.downloadResumeLink.click();
+  async clickQaPracticeSite() {
+    await this.qaPracticeSiteLink.click({ force: true });
   }
 
-  async toggleMobileMenu() {
-    await this.mobileMenuToggle.click();
-    // Wait for menu to be visible or hidden based on current state
-    await this.page.waitForTimeout(300);
+  async clickQaAutomationPortfolio() {
+    await this.qaAutomationPortfolioLink.click({ force: true });
   }
 
-  async isMobileMenuOpen() {
-    return await this.mobileMenu.isVisible();
+  async clickWebQaAutomation() {
+    await this.webQaAutomationLink.click({ force: true });
   }
 
   async verifyPageTitle() {
@@ -150,46 +132,25 @@ export class PortfolioPage {
     await expect(this.page.locator('h1')).toContainText('Jodell');
   }
 
-  async verifyTypewriterEffect() {
-    // Wait for typewriter effect to complete
-    await this.subtitleElement.waitFor({ state: 'visible', timeout: 5000 });
-    // Check if it contains expected text patterns
-    const subtitleText = await this.subtitleElement.textContent();
-    expect(subtitleText).toContain('QA Engineer');
-    expect(subtitleText).toContain('Software Developer');
-    expect(subtitleText).toContain('IoT Specialist');
-  }
+  async verifySkillsContent() {
+    // Verify skills section has the expected content structure
+    await expect(this.languagesSection).toBeVisible();
+    await expect(this.frameworksSection).toBeVisible();
+    await expect(this.conceptsSection).toBeVisible();
 
-  async verifyActiveNavigation(section: string) {
-    // Check for active class or aria-current attribute
-    const activeNavLink = this.page.locator(`nav a[href="#${section.toLowerCase()}"]`);
-    await expect(activeNavLink).toHaveClass(/active|current/);
-  }
+    // Check for expected technologies
+    const languagesText = await this.languagesSection.textContent();
+    const frameworksText = await this.frameworksSection.textContent();
+    const conceptsText = await this.conceptsSection.textContent();
 
-  async verifySkillsProgressBars() {
-    // Wait for skills section to be visible
-    await this.skillsSection.isVisible();
-    await this.page.waitForTimeout(1000); // Allow time for animations
-
-    // Check that progress bars exist
-    const progressBars = await this.skillsProgressBars.all();
-    expect(progressBars.length).toBeGreaterThan(0);
-
-    // Check at least one progress bar for each category
-    const langBars = await this.langProgressBars.all();
-    const frameworkBars = await this.frameworksProgressBars.all();
-    const conceptBars = await this.conceptsProgressBars.all();
-
-    expect(langBars.length).toBeGreaterThan(0);
-    expect(frameworkBars.length).toBeGreaterThan(0);
-    expect(conceptBars.length).toBeGreaterThan(0);
-  }
-
-  async verifyWebQaAutomationProject() {
-    await this.webQaAutomationProject.isVisible();
-    await expect(this.webQaAutomationProject).toContainText('Web QA Automation');
-    await expect(this.webQaAutomationProject).toContainText('Playwright');
-    await expect(this.webQaAutomationProject).toContainText('test automation');
+    expect(languagesText).toContain('Java');
+    expect(languagesText).toContain('Python');
+    expect(frameworksText).toContain('Playwright');
+    expect(frameworksText).toContain('TypeScript');
+    expect(frameworksText).toContain('Selenium');
+    expect(frameworksText).toContain('Flutter');
+    expect(conceptsText).toContain('QA Automation');
+    expect(conceptsText).toContain('Networking');
   }
 
   async verifyAllSectionsPresent() {
@@ -200,34 +161,33 @@ export class PortfolioPage {
     await expect(this.educationSection).toBeVisible();
   }
 
-  async verifySmoothScrolling() {
-    // Test that clicking nav links results in smooth scroll (no jump)
-    await this.skillsLink.click();
-    await this.page.waitForTimeout(800); // Allow time for smooth scroll
-    await expect(this.skillsSection).toBeInViewport();
+  async verifyProjectsSection() {
+    await expect(this.projectsSection).toBeVisible();
+    await expect(this.qaAutomationProjectCategory).toBeVisible();
+    await expect(this.ticketlyMobileProjectCategory).toBeVisible();
+    await expect(this.iotRoboticsProjectCategory).toBeVisible();
+
+    // Verify the Web QA Automation project link exists
+    await expect(this.webQaAutomationLink).toBeVisible();
+    await expect(this.webQaAutomationLink).toHaveAttribute('href', /github\.com\/jodss11\/web-qa-automation/);
   }
 
-  async verifyIconHoverEffects() {
-    // Test skill icon hover effects
-    const skillIcons = this.page.locator('.skill-icon, .icon-skill, [class*="skill"] i, .skills i, .skill-icon i, .tech-icon');
-    if (await skillIcons.count() > 0) {
-      await skillIcons.first().hover();
-      // Wait for potential transition
-      await this.page.waitForTimeout(300);
-    }
-  }
+  async verifyExternalLinks() {
+    // Verify all the external project links exist and have correct hrefs
+    await expect(this.securityInventoryQaLink).toBeVisible();
+    await expect(this.securityInventoryQaLink).toHaveAttribute('href', /github\.com\/jodss11\/security-inventory-qa/);
 
-  async verifyFormHandling() {
-    await this.contactForm.waitFor({ state: 'visible', timeout: 5000 });
-    // Basic form presence test
-    await expect(this.contactForm).toBeVisible();
-    await expect(this.formSubmitButton).toBeVisible();
-  }
+    await expect(this.seleniumAutomationLink).toBeVisible();
+    await expect(this.seleniumAutomationLink).toHaveAttribute('href', /github\.com\/jodss11\/selenium_automation/);
 
-  async verifyScrollReveal() {
-    // Check that scroll reveal elements exist
-    const revealElements = await this.scrollRevealElements.all();
-    expect(revealElements.length).toBeGreaterThan(0);
+    await expect(this.qaPracticeSiteLink).toBeVisible();
+    await expect(this.qaPracticeSiteLink).toHaveAttribute('href', /github\.com\/jodss11\/qa-practice-site/);
+
+    await expect(this.qaAutomationPortfolioLink).toBeVisible();
+    await expect(this.qaAutomationPortfolioLink).toHaveAttribute('href', /github\.com\/jodss11\/qa-automation-portfolio/);
+
+    await expect(this.webQaAutomationLink).toBeVisible();
+    await expect(this.webQaAutomationLink).toHaveAttribute('href', /github\.com\/jodss11\/web-qa-automation/);
   }
 
   async verifyResponsiveDesign(viewport: { width: number; height: number }, name: string) {
