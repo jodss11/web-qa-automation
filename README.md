@@ -1,5 +1,7 @@
 # Portfolio Website QA Automation
 
+✅ **All 57 tests are now passing!** (Chromium, Firefox, WebKit)
+
 This repository contains a Playwright-based test automation framework for testing the portfolio website at https://jodell-website.vercel.app/.
 
 ## 📋 Overview
@@ -7,8 +9,8 @@ This repository contains a Playwright-based test automation framework for testin
 The framework tests all functional aspects of the portfolio website including:
 - Page loading and title verification
 - Navigation between sections (About, Skills, Projects, Experience)
-- External links (GitHub, JobStreet, LinkedIn)
-- Resume download functionality
+- External links to QA automation project repositories on GitHub
+- Skills section content verification
 - Responsive design across mobile, tablet, and desktop viewports
 
 ## 🛠️ Prerequisites
@@ -97,6 +99,7 @@ The test suite covers:
 1. **Basic Page Validation**
    - Page title verification
    - Hero section visibility
+   - Subtitle content verification
 
 2. **Navigation Testing**
    - About section navigation (`#summary`)
@@ -104,18 +107,30 @@ The test suite covers:
    - Projects section navigation (`#projects`)
    - Experience section navigation (`#experience`)
    - All sections visibility verification
+   - Logo navigation to hero section
 
-3. **External Links**
-   - GitHub profile link (avoids project links)
-   - JobStreet profile link
-   - LinkedIn profile link
+3. **External Project Links**
+   - Security Inventory QA (Playwright/TypeScript E2E framework with POM, API mocking, CI/CD)
+   - Selenium Automation Suite (Java/Selenium)
+   - QA Practice Site
+   - QA Automation Portfolio
+   - Web QA Automation
+   - External link validation (new tab/window handling)
 
-4. **File Download**
-   - Resume PDF download verification
+4. **Skills Section Verification**
+   - Languages: Java, Python, TypeScript, Dart, C++, C#
+   - Frameworks & Tech: Playwright, TypeScript, Selenium, Flutter, Android, Arduino
+   - Concepts & Domains: QA Automation, CI/CD, Machine Learning, Networking, Hardware Troubleshooting, UI/UX Design
 
-5. **Responsive Design**
-   - Mobile viewport (375x667)
-   - Tablet viewport (768x1024)
+5. **Projects Section Structure**
+   - QA Automation & Testing category visibility
+   - Ticketly & Mobile Application Suite category visibility  
+   - IoT & Robotics Systems category visibility
+   - Web QA Automation project link validation
+
+6. **Responsive Design**
+   - Mobile viewport (375x667) - iPhone X
+   - Tablet viewport (768x1024) - iPad
    - Desktop viewport (1920x1080)
 
 ## 🤝 Contributing
